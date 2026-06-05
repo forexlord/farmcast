@@ -1,11 +1,25 @@
-export default function Home() {
+import { Fab } from "@/components/dashboard/fab";
+import { FarmAdvisory } from "@/components/dashboard/farm-advisory";
+import { ForecastStrip } from "@/components/dashboard/forecast-strip";
+import { InsightsGrid } from "@/components/dashboard/insights-grid";
+import { WeatherHero } from "@/components/dashboard/weather-hero";
+import { Footer } from "@/components/layout/footer";
+import { Header } from "@/components/layout/header";
+
+export default function DashboardPage() {
   return (
-    <main className="flex flex-1 flex-col items-center justify-center px-6 py-24">
-      <h1 className="text-3xl font-semibold tracking-tight">Farmcast</h1>
-      <p className="mt-4 max-w-md text-center text-zinc-600 dark:text-zinc-400">
-        Edit <code className="font-mono text-sm">src/app/page.tsx</code> to get
-        started.
-      </p>
-    </main>
+    <>
+      <Header pathname="/" />
+      <main className="max-w-container-max mx-auto px-margin-desktop py-stack-lg space-y-gutter flex-1 w-full pb-20 sm:pb-8">
+        <section className="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+          <WeatherHero />
+          <FarmAdvisory />
+        </section>
+        <ForecastStrip />
+        <InsightsGrid />
+      </main>
+      <Footer />
+      <Fab />
+    </>
   );
 }
