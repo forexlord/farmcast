@@ -16,7 +16,7 @@ FarmCast bridges that gap: weather data framed in farming language, with AI advi
 
 ### Dashboard (`/`)
 
-- **Auto location** — detects your position via IP geolocation on first load
+- **Auto location** — detects your position via IP geolocation on first load (see [Location & VPN](#location--vpn) if the city looks wrong)
 - **Current conditions** — temperature, condition, feels-like, humidity, wind
 - **Farm Advisory** — AI summary that translates the forecast into actionable crop guidance
 - **7-day forecast strip** — quick view of the week ahead
@@ -157,6 +157,14 @@ For best results, use a **top-down drone or aerial photo** with clearly visible 
 Search for sample imagery (e.g. "drone aerial farm photo Kenya trees") to verify the CV pipeline. If a proper aerial image still returns zero trees, that points to a backend issue on WeatherAI's side — see Known issues below.
 
 ## Troubleshooting
+
+### Location & VPN
+
+Auto location uses WeatherAI’s `/v1/weather-geo?ip=auto`, which resolves position from the **request IP address** seen by the server — not GPS from your device.
+
+If you are on a **VPN**, **proxy**, or **corporate network**, the detected city/region may not match where you actually are. The same applies if your ISP assigns you an IP in a different region, or if your public IP changes (mobile hotspot, travel, router reconnect).
+
+**What to do:** use the dashboard search bar to enter your farm or city, or click **Use my location** after disabling the VPN if you need IP-based detection. Searched coordinates are saved in the browser and used on the Forecast page until you search again.
 
 ### API quota exceeded (429)
 
