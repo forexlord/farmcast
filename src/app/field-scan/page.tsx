@@ -15,11 +15,14 @@ import { Icon } from "@/components/ui/icon";
 import type { Observation } from "@/types/ui";
 import {
   analyzeField,
+  extractCoords,
+  getWeatherGeo,
   isApiError,
   isNoTreesDetected,
   loadCoords,
   mapFieldScanResults,
   NO_TREES_MESSAGE,
+  saveCoords,
   type ComparisonViewData,
   type FieldStatsView,
   type HealthDistributionView,
@@ -111,7 +114,17 @@ export default function FieldScanPage() {
 
   return (
     <>
-      <Header pathname="/field-scan" variant="compact" fixed={false} />
+      <Header
+        pathname="/field-scan"
+        variant="compact"
+        fixed={false}
+        onUseMyLocation={() => {
+          void getWeatherGeo().then((data) => {
+            const coords = extractCoords(data);
+            if (coords) saveCoords(coords);
+          });
+        }}
+      />
       <main className="flex-grow w-full max-w-container-max mx-auto px-margin-desktop py-stack-lg pb-8 md:pb-12">
         <FieldScanPageHeader />
 

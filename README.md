@@ -109,10 +109,17 @@ All WeatherAI calls go through Next.js API routes so the API key stays on the se
 | `/api/weather-geo`    | GET    | Location + weather via IP auto-detection       |
 | `/api/weather`        | GET    | Weather by `lat`, `lon`, `days` query params |
 | `/api/field-scan`     | POST   | Multipart image upload → tree analysis       |
+| `/api/geocode`        | GET    | City search via server-side Nominatim proxy  |
+
+All proxy routes enforce per-IP rate limiting (60 req/min) and validate inputs (coordinates, upload size/MIME).
 
 ### Client library
 
-`src/lib/weather-client.ts` — typed API client, response mappers, in-memory weather cache, and coordinate persistence (`localStorage`).
+`src/lib/weather/` — split weather module (types, API client, mappers, cache, icons, field-scan). Re-exported from `src/lib/weather-client.ts` for convenience.
+
+`src/lib/weather/server.ts` — server-only helpers for SSR initial weather fetch.
+
+`src/hooks/` — `useDashboardWeather`, `useForecastWeather` for shared fetch orchestration and retry logic.
 
 `src/lib/risk-engine.ts` — derives farm-relevant risk flags from forecast data.
 
@@ -121,20 +128,26 @@ All WeatherAI calls go through Next.js API routes so the API key stays on the se
 ```
 src/
   app/
-    page.tsx              # Dashboard
-    forecast/page.tsx     # Detailed forecast
-    field-scan/page.tsx   # Field imagery analysis
-    api/                  # Server-side WeatherAI proxies
+    page.tsx              # Dashboard (SSR + client view)
+    dashboard-view.tsx    # Client dashboard UI
+    forecast/             # Forecast page + forecast-view.tsx
+    field-scan/           # Field imagery analysis
+    error.tsx             # Global error boundary
+    api/                  # Server-side WeatherAI + geocode proxies
   components/
     dashboard/            # Weather hero, advisory, forecast strip
     forecast/             # Charts, daily grid, risk flags
     field-scan/           # Upload, comparison, observations
     layout/               # Header, footer, mobile nav
-    ui/                   # Design system atoms
+    ui/                   # Design system atoms (ErrorCard, etc.)
   data/navigation.ts      # Nav links and profile image
-  lib/                    # API client, cache, risk engine
+  hooks/                  # useDashboardWeather, useForecastWeather
+  lib/
+    weather/              # Split weather module
+    api-errors.ts         # Shared error parsing
+    rate-limit.ts         # In-memory rate limiter
+    risk-engine.ts        # Farm risk flags
   types/ui.ts             # Shared component prop types
-  theme/tokens.ts         # Design tokens
 ```
 
 ## Testing field scan
@@ -166,4 +179,4 @@ That reset time is when your quota becomes available again — not an automatic 
 - **Language:** TypeScript (strict)
 - **Styling:** Tailwind CSS v4, custom design tokens
 - **Weather API:** [WeatherAI](https://api.weather-ai.co)
-- **Geocoding:** OpenStreetMap Nominatim (location search on dashboard)
+- **Geocoding:** OpenStreetMap Nominatim (proxied via `/api/geocode`)

@@ -8,7 +8,7 @@ type ForecastStripProps = {
 
 export function ForecastStrip({ days }: ForecastStripProps) {
   return (
-    <section>
+    <section className="min-w-0 w-full">
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-end gap-2 mb-stack-md">
         <h3 className="text-headline-md text-on-surface">7-Day Outlook</h3>
         <Link

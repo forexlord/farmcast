@@ -1,11 +1,16 @@
 import {
+  enforceRateLimit,
   errorResponse,
+  fetchUpstreamWeather,
   getWeatherApiKey,
   parseUpstreamError,
 } from "@/lib/api-utils";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function GET() {
+export async function GET(request: NextRequest) {
+  const limited = enforceRateLimit(request);
+  if (limited) return limited;
+
   const apiKey = getWeatherApiKey();
   if (!apiKey) {
     return errorResponse(500, "Weather API key is not configured");
@@ -15,10 +20,7 @@ export async function GET() {
     "https://api.weather-ai.co/v1/weather-geo?ip=auto&days=7&ai=true&units=metric";
 
   try {
-    const upstream = await fetch(url, {
-      headers: { Authorization: `Bearer ${apiKey}` },
-      cache: "no-store",
-    });
+    const upstream = await fetchUpstreamWeather(url, apiKey);
 
     if (!upstream.ok) {
       const error = await parseUpstreamError(upstream);

@@ -30,7 +30,6 @@ export function ComparisonView({ data }: ComparisonViewProps) {
           alt="AI overlay imagery"
           label={data.aiLabel}
           variant="ai"
-          overlayMarkers={data.overlayMarkers}
         />
       </div>
     </Card>

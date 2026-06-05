@@ -2,7 +2,7 @@
 
 import { Icon } from "@/components/ui/icon";
 import { cn } from "@/lib/cn";
-import { useRef } from "react";
+import { useId, useRef } from "react";
 
 type UploadZoneProps = {
   icon: string;
@@ -24,20 +24,37 @@ export function UploadZone({
   onFileSelect,
 }: UploadZoneProps) {
   const inputRef = useRef<HTMLInputElement>(null);
+  const inputId = useId();
 
   function handleFiles(files: FileList | null) {
     const file = files?.[0];
     if (file) onFileSelect(file);
   }
 
+  function openPicker() {
+    inputRef.current?.click();
+  }
+
+  function handleKeyDown(event: React.KeyboardEvent) {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      openPicker();
+    }
+  }
+
   return (
     <div
+      role="button"
+      tabIndex={0}
+      aria-label="Upload farm imagery"
+      aria-describedby={`${inputId}-hint`}
       className={cn(
         "border-2 border-dashed border-primary/40 bg-primary/5 rounded-xl p-stack-lg",
         "flex flex-col items-center justify-center text-center cursor-pointer",
-        "hover:bg-primary/10 transition-all duration-300 group",
+        "hover:bg-primary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary transition-all duration-300 group",
       )}
-      onClick={() => inputRef.current?.click()}
+      onClick={openPicker}
+      onKeyDown={handleKeyDown}
       onDragOver={(event) => {
         event.preventDefault();
       }}
@@ -48,9 +65,10 @@ export function UploadZone({
     >
       <input
         ref={inputRef}
+        id={inputId}
         type="file"
         accept="image/jpeg,image/png,image/webp,image/tiff,.tif,.tiff"
-        className="hidden"
+        className="sr-only"
         onChange={(event) => handleFiles(event.target.files)}
       />
       <div className="w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center mb-stack-md group-hover:scale-110 transition-transform">
@@ -62,7 +80,12 @@ export function UploadZone({
             Drag farm imagery here or{" "}
             <span className="text-primary underline">{browseLabel}</span>
           </p>
-          <p className="text-body-sm text-on-surface-variant mt-2">{hint}</p>
+          <p
+            id={`${inputId}-hint`}
+            className="text-body-sm text-on-surface-variant mt-2"
+          >
+            {hint}
+          </p>
           {fileName && (
             <p className="text-body-sm text-primary mt-2">{fileName}</p>
           )}
@@ -75,7 +98,7 @@ export function UploadZone({
       )}
       {status === "complete" && (
         <p className="text-body-md text-primary font-semibold">
-          {statusMessage ?? "Upload Complete. Analyzing..."}
+          {statusMessage ?? "Analysis complete."}
         </p>
       )}
       {status === "error" && (

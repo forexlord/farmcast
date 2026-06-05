@@ -1,10 +1,15 @@
 import {
+  enforceRateLimit,
   errorResponse,
   getWeatherApiKey,
   parseUpstreamError,
+  validateFieldScanUpload,
 } from "@/lib/api-utils";
 
 export async function POST(request: Request) {
+  const limited = enforceRateLimit(request);
+  if (limited) return limited;
+
   const apiKey = getWeatherApiKey();
   if (!apiKey) {
     return errorResponse(500, "Weather API key is not configured");
@@ -15,11 +20,14 @@ export async function POST(request: Request) {
     const upstreamForm = new FormData();
 
     const image = incoming.get("image");
-    if (image instanceof File) {
-      upstreamForm.append("image", image, image.name);
-    } else {
-      return errorResponse(400, "Missing required field: image");
+    const uploadError = validateFieldScanUpload(
+      image instanceof File ? image : null,
+    );
+    if (uploadError) {
+      return errorResponse(400, uploadError);
     }
+
+    upstreamForm.append("image", image as File, (image as File).name);
 
     for (const field of [
       "farmerId",

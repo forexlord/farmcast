@@ -14,7 +14,7 @@ export function WeatherHero({ data }: WeatherHeroProps) {
   ] as const;
 
   return (
-    <Card variant="elevated" className="lg:col-span-8 p-stack-lg relative overflow-hidden">
+    <Card variant="elevated" className="lg:col-span-8 p-stack-lg relative overflow-hidden min-w-0">
       <div className="relative z-10 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
         <div className="min-w-0">
           <div className="flex items-center gap-2 mb-2">
