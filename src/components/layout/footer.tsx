@@ -1,6 +1,3 @@
-import { NavLink } from "@/components/ui/nav-link";
-import { footerLinks } from "@/data/navigation";
-
 type FooterProps = {
   variant?: "inline" | "stacked";
 };
@@ -27,17 +24,6 @@ export function Footer({ variant = "inline" }: FooterProps) {
             </p>
           </div>
         )}
-        <nav className="flex flex-wrap justify-center gap-4 sm:gap-6">
-          {footerLinks.map((link) => (
-            <NavLink
-              key={link.label}
-              href={link.href}
-              className="text-body-sm text-on-surface-variant hover:text-on-surface border-none pb-0"
-            >
-              {link.label}
-            </NavLink>
-          ))}
-        </nav>
       </div>
     </footer>
   );

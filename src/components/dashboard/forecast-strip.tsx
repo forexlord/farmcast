@@ -1,8 +1,12 @@
 import { ForecastDayCard } from "@/components/dashboard/forecast-day-card";
-import { forecastDays } from "@/data/dashboard";
+import type { ForecastDay } from "@/data/dashboard";
 import Link from "next/link";
 
-export function ForecastStrip() {
+type ForecastStripProps = {
+  days: ForecastDay[];
+};
+
+export function ForecastStrip({ days }: ForecastStripProps) {
   return (
     <section>
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-end gap-2 mb-stack-md">
@@ -15,7 +19,7 @@ export function ForecastStrip() {
         </Link>
       </div>
       <div className="flex gap-3 sm:gap-4 overflow-x-auto pb-4 hide-scrollbar -mx-1 px-1">
-        {forecastDays.map((day) => (
+        {days.map((day) => (
           <ForecastDayCard key={day.day} day={day} />
         ))}
       </div>

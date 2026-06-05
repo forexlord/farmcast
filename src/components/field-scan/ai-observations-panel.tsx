@@ -1,9 +1,17 @@
 import { ObservationItem } from "@/components/field-scan/observation-item";
 import { Card } from "@/components/ui/card";
 import { Icon } from "@/components/ui/icon";
-import { observations } from "@/data/field-scan";
+import type { Observation } from "@/data/field-scan";
 
-export function AiObservationsPanel() {
+type AiObservationsPanelProps = {
+  observations: Observation[];
+  notice?: string;
+};
+
+export function AiObservationsPanel({
+  observations,
+  notice,
+}: AiObservationsPanelProps) {
   return (
     <Card variant="elevated" className="p-stack-lg ai-insight-panel">
       <div className="flex items-center gap-2 mb-stack-md">
@@ -12,11 +20,21 @@ export function AiObservationsPanel() {
           AI Observations & Action Items
         </h2>
       </div>
-      <ul className="space-y-stack-md">
-        {observations.map((observation) => (
-          <ObservationItem key={observation.title} observation={observation} />
-        ))}
-      </ul>
+      {notice && (
+        <p className="text-body-sm text-on-surface-variant mb-stack-md border-l-2 border-outline-variant pl-3">
+          {notice}
+        </p>
+      )}
+      {observations.length > 0 && (
+        <ul className="space-y-stack-md">
+          {observations.map((observation) => (
+            <ObservationItem
+              key={`${observation.title}-${observation.detail}`}
+              observation={observation}
+            />
+          ))}
+        </ul>
+      )}
     </Card>
   );
 }

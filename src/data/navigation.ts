@@ -9,12 +9,6 @@ export const navItems: NavItem[] = [
   { label: "Field Scan", href: "/field-scan" },
 ];
 
-export const footerLinks = [
-  { label: "Terms", href: "#" },
-  { label: "Privacy", href: "#" },
-  { label: "API Status", href: "#" },
-] as const;
-
 export const profileImages = {
   dashboard:
     "https://lh3.googleusercontent.com/aida-public/AB6AXuC-0XiwH-dfXBBI2HtkJ8R5OL0qEuNU38UOr6OW7LEEJUVHXVHPQqKQeDSVpp8vWUGJz6TAsbxrQH9kHxkw31nqAwqeIKa3Kop_ra4qxsIpb3sHXeYGDPrqT-swGJeJO6iZiiO6RgDoJsIVuRCwOd6IRSv5Thn57VDaZAeXi8PprpS3kSmUvBsfmIVkBVvKHe3bAkW03udFW7-Dor7RW0CDLpdEJlN1xil1S74irVlG8e39TbYqhHDZCL4g3ydUm0miutebNgD3e6Vj",

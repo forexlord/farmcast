@@ -1,10 +1,13 @@
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Icon } from "@/components/ui/icon";
-import { farmAdvisory } from "@/data/dashboard";
+import type { FarmAdvisoryView } from "@/lib/weather-client";
 
-export function FarmAdvisory() {
+type FarmAdvisoryProps = {
+  data: FarmAdvisoryView;
+};
+
+export function FarmAdvisory({ data }: FarmAdvisoryProps) {
   return (
     <Card
       variant="advisory"
@@ -20,17 +23,12 @@ export function FarmAdvisory() {
           <h2 className="text-headline-md text-primary">Farm Advisory</h2>
         </div>
         <p className="text-body-md text-on-surface leading-relaxed">
-          Optimal planting conditions for{" "}
-          <span className="font-bold text-primary">{farmAdvisory.crop}</span> are
-          expected in the next 48 hours. Soil moisture is currently high (
-          {farmAdvisory.soilMoisture}%), reducing immediate irrigation needs.
-          Monitor for pest activity as high humidity persists.
+          {data.message}
         </p>
       </div>
 
-      <div className="relative z-10 mt-6 flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-3">
+      <div className="relative z-10 mt-6">
         <Badge className="self-start">Action Required</Badge>
-        <Button className="w-full sm:w-auto">Export Plan</Button>
       </div>
     </Card>
   );

@@ -6,7 +6,7 @@ type InputProps = InputHTMLAttributes<HTMLInputElement> & {
   icon?: string;
 };
 
-export function Input({ icon, className, ...props }: InputProps) {
+export function Input({ icon, className, onKeyDown, ...props }: InputProps) {
   return (
     <div className="relative w-full">
       {icon && (
@@ -22,6 +22,7 @@ export function Input({ icon, className, ...props }: InputProps) {
           icon ? "py-2 pr-4 pl-10 text-body-sm" : "px-4 py-3",
           className,
         )}
+        onKeyDown={onKeyDown}
         {...props}
       />
     </div>

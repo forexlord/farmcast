@@ -41,6 +41,7 @@ export function ComparisonImage({
           variant === "ai" && "brightness-75 contrast-125",
         )}
         sizes="(max-width: 768px) 100vw, 50vw"
+        unoptimized
       />
 
       {overlayMarkers && (

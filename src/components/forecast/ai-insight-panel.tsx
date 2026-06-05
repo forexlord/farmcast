@@ -1,9 +1,12 @@
-import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
-import { aiInsight } from "@/data/forecast";
+import type { AiInsightView } from "@/lib/weather-client";
 
-export function AiInsightPanel() {
-  const parts = aiInsight.message.split(aiInsight.highlight);
+type AiInsightPanelProps = {
+  insight: AiInsightView;
+};
+
+export function AiInsightPanel({ insight }: AiInsightPanelProps) {
+  const parts = insight.message.split(insight.highlight);
 
   return (
     <div className="ai-insight-panel border border-primary/20 rounded-xl p-stack-lg relative overflow-hidden">
@@ -14,14 +17,11 @@ export function AiInsightPanel() {
             FarmCast Intelligence
           </h3>
         </div>
-        <p className="text-body-md text-on-surface mb-6 leading-relaxed">
+        <p className="text-body-md text-on-surface leading-relaxed">
           {parts[0]}
-          <strong className="text-primary">{aiInsight.highlight}</strong>
+          <strong className="text-primary">{insight.highlight}</strong>
           {parts[1]}
         </p>
-        <Button variant="surface" className="w-full sm:w-auto">
-          {aiInsight.actionLabel}
-        </Button>
       </div>
       <div className="absolute -right-4 -bottom-4 opacity-10 pointer-events-none">
         <Icon name="psychology" size="xl" className="text-primary" />

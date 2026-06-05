@@ -1,8 +1,12 @@
 import { Card } from "@/components/ui/card";
 import { ProgressBar } from "@/components/ui/progress-bar";
-import { soilDynamics } from "@/data/forecast";
+import type { SoilDynamicsView } from "@/lib/weather-client";
 
-export function SoilDynamicsPanel() {
+type SoilDynamicsPanelProps = {
+  data: SoilDynamicsView;
+};
+
+export function SoilDynamicsPanel({ data }: SoilDynamicsPanelProps) {
   return (
     <Card variant="elevated" className="p-stack-lg">
       <h3 className="text-label-md text-on-surface-variant uppercase tracking-widest mb-4">
@@ -11,17 +15,13 @@ export function SoilDynamicsPanel() {
       <div className="space-y-6">
         <div>
           <div className="flex justify-between text-body-sm mb-2">
-            <span className="text-outline">
-              {soilDynamics.surfaceMoisture.label}
-            </span>
-            <span className="text-primary">
-              {soilDynamics.surfaceMoisture.value}%
-            </span>
+            <span className="text-outline">{data.surfaceMoisture.label}</span>
+            <span className="text-primary">{data.surfaceMoisture.value}%</span>
           </div>
-          <ProgressBar value={soilDynamics.surfaceMoisture.value} />
+          <ProgressBar value={data.surfaceMoisture.value} />
         </div>
         <div className="grid grid-cols-2 gap-4">
-          {soilDynamics.metrics.map((metric) => (
+          {data.metrics.map((metric) => (
             <div
               key={metric.label}
               className="bg-surface-container-low p-3 rounded-lg"

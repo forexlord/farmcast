@@ -12,6 +12,9 @@ type HeaderProps = {
   variant?: "full" | "compact";
   fixed?: boolean;
   profile?: keyof typeof profileImages;
+  onLocationSearch?: (query: string) => void;
+  searchValue?: string;
+  onSearchValueChange?: (value: string) => void;
 };
 
 export function Header({
@@ -19,7 +22,15 @@ export function Header({
   variant = "full",
   fixed = variant === "compact",
   profile = variant === "compact" ? "forecast" : "dashboard",
+  onLocationSearch,
+  searchValue,
+  onSearchValueChange,
 }: HeaderProps) {
+  function submitSearch() {
+    if (searchValue?.trim() && onLocationSearch) {
+      onLocationSearch(searchValue.trim());
+    }
+  }
   const profileImage = profileImages[profile];
 
   return (
@@ -49,7 +60,15 @@ export function Header({
 
         {variant === "full" && (
           <div className="hidden lg:flex items-center gap-4 flex-1 max-w-md mx-4">
-            <Input icon="search" placeholder="Search field location..." />
+            <Input
+              icon="search"
+              placeholder="Search field location..."
+              value={searchValue}
+              onChange={(event) => onSearchValueChange?.(event.target.value)}
+              onKeyDown={(event) => {
+                if (event.key === "Enter") submitSearch();
+              }}
+            />
             <Button variant="icon" aria-label="Use my location">
               <Icon name="my_location" />
             </Button>
