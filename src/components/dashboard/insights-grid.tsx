@@ -2,12 +2,28 @@ import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { Icon } from "@/components/ui/icon";
 import { cn } from "@/lib/cn";
-import {
-  forecastAccuracy,
-  satelliteScan,
-  soilMetrics,
-} from "@/data/dashboard";
 import Image from "next/image";
+
+const soilMetrics = {
+  riskLevel: "Low Risk",
+  status: "Stable",
+  nitrogen: { label: "Nitrogen", value: "Optimal", width: "w-[85%]" },
+  potassium: { label: "Potassium", value: "Low", width: "w-[40%]" },
+} as const;
+
+const satelliteScan = {
+  title: "Satellite Field Scan",
+  updatedAt: "14 mins ago",
+  imageUrl:
+    "https://lh3.googleusercontent.com/aida-public/AB6AXuBvHRaLXvjMKFIZEwTtns48JNNiAJjy7uugmTbgzvRwimb3trSUqGvhr2bEKX-dYjVRCPnedVXbTWjh6fCGLyJCvAxBESEqJW_wrsVsuGTjHI2ntXfsVRB5gxJG4fmP7aVgnLNwo53mgoC4GSy48Mxym_62QuL1qvFIJZ0Wu_6xf_7dUxgAm3cGgG2DWrdncK0pt_f-QjQei80UWoafRJu7MeKqrbGVmRP1ISjtlFb8VWfOhPri5OA11V8QgGUZyXF91J6ZuXRm8m8a",
+  linkLabel: "View NDVI Map",
+} as const;
+
+const forecastAccuracy = {
+  value: 94,
+  delta: "+2% vs avg",
+  bars: [40, 60, 55, 80, 100],
+} as const;
 
 export function InsightsGrid() {
   return (

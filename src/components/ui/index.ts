@@ -1,12 +1,9 @@
 export { Badge } from "./badge";
 export { Button } from "./button";
 export { Card } from "./card";
-export { FormField } from "./form-field";
 export { Icon } from "./icon";
 export { Input } from "./input";
-export { Label } from "./label";
 export { LegendDot } from "./legend-dot";
 export { NavLink } from "./nav-link";
 export { ProgressBar } from "./progress-bar";
 export { SegmentedBar } from "./segmented-bar";
-export { Textarea } from "./textarea";

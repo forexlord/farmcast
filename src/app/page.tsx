@@ -24,7 +24,7 @@ import {
   type CurrentWeatherView,
   type FarmAdvisoryView,
 } from "@/lib/weather-client";
-import type { ForecastDay } from "@/data/dashboard";
+import type { ForecastDay } from "@/types/ui";
 import { useCallback, useEffect, useState } from "react";
 
 type DashboardState = {

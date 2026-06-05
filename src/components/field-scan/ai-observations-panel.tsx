@@ -1,7 +1,7 @@
 import { ObservationItem } from "@/components/field-scan/observation-item";
 import { Card } from "@/components/ui/card";
 import { Icon } from "@/components/ui/icon";
-import type { Observation } from "@/data/field-scan";
+import type { Observation } from "@/types/ui";
 
 type AiObservationsPanelProps = {
   observations: Observation[];

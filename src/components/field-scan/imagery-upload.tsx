@@ -2,7 +2,6 @@ import { UploadZone } from "@/components/field-scan/upload-zone";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Icon } from "@/components/ui/icon";
-import { uploadConfig } from "@/data/field-scan";
 
 type ImageryUploadProps = {
   status: "idle" | "processing" | "complete" | "error";
@@ -27,9 +26,9 @@ export function ImageryUpload({
         Imagery Upload
       </h2>
       <UploadZone
-        icon={uploadConfig.icon}
-        browseLabel={uploadConfig.browseLabel}
-        hint={uploadConfig.hint}
+        icon="potted_plant"
+        browseLabel="Browse Files"
+        hint="Supports TIFF, JPG, PNG (Max 50MB)"
         status={status}
         statusMessage={statusMessage}
         fileName={fileName}
@@ -41,7 +40,7 @@ export function ImageryUpload({
         disabled={disabled || status === "processing"}
       >
         <Icon name="analytics" size="sm" />
-        {uploadConfig.analyzeLabel}
+        Analyze Field
       </Button>
     </Card>
   );

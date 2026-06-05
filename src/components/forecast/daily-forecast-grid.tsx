@@ -1,5 +1,5 @@
 import { DailyForecastCard } from "@/components/forecast/daily-forecast-card";
-import type { DailyForecast } from "@/data/forecast";
+import type { DailyForecast } from "@/types/ui";
 
 type DailyForecastGridProps = {
   forecasts: DailyForecast[];

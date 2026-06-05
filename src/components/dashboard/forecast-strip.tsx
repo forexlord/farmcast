@@ -1,5 +1,5 @@
 import { ForecastDayCard } from "@/components/dashboard/forecast-day-card";
-import type { ForecastDay } from "@/data/dashboard";
+import type { ForecastDay } from "@/types/ui";
 import Link from "next/link";
 
 type ForecastStripProps = {

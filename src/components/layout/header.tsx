@@ -4,14 +4,13 @@ import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { Input } from "@/components/ui/input";
 import { NavLink } from "@/components/ui/nav-link";
-import { isNavActive, navItems, profileImages } from "@/data/navigation";
+import { isNavActive, navItems, profileImage } from "@/data/navigation";
 import Image from "next/image";
 
 type HeaderProps = {
   pathname: string;
   variant?: "full" | "compact";
   fixed?: boolean;
-  profile?: keyof typeof profileImages;
   onLocationSearch?: (query: string) => void;
   searchValue?: string;
   onSearchValueChange?: (value: string) => void;
@@ -21,7 +20,6 @@ export function Header({
   pathname,
   variant = "full",
   fixed = variant === "compact",
-  profile = variant === "compact" ? "forecast" : "dashboard",
   onLocationSearch,
   searchValue,
   onSearchValueChange,
@@ -31,8 +29,6 @@ export function Header({
       onLocationSearch(searchValue.trim());
     }
   }
-  const profileImage = profileImages[profile];
-
   return (
     <header
       className={

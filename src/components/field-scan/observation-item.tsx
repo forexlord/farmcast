@@ -1,6 +1,6 @@
 import { Icon } from "@/components/ui/icon";
 import { cn } from "@/lib/cn";
-import type { Observation } from "@/data/field-scan";
+import type { Observation } from "@/types/ui";
 
 type ObservationItemProps = {
   observation: Observation;

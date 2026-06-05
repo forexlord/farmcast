@@ -11,8 +11,7 @@ import { Header } from "@/components/layout/header";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import type { DailyForecast } from "@/data/forecast";
-import type { RiskFlag } from "@/data/forecast";
+import type { DailyForecast, RiskFlag } from "@/types/ui";
 import {
   buildForecastSubtitle,
   getWeather,

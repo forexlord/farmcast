@@ -1,7 +1,7 @@
 import { Card } from "@/components/ui/card";
 import { Icon } from "@/components/ui/icon";
 import { cn } from "@/lib/cn";
-import type { DailyForecast } from "@/data/forecast";
+import type { DailyForecast } from "@/types/ui";
 
 type DailyForecastCardProps = {
   forecast: DailyForecast;

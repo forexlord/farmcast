@@ -1,4 +1,4 @@
-import type { RiskFlag } from "@/data/forecast";
+import type { RiskFlag } from "@/types/ui";
 
 export type ForecastRiskInput = {
   date?: string;

@@ -12,7 +12,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Icon } from "@/components/ui/icon";
-import type { Observation } from "@/data/field-scan";
+import type { Observation } from "@/types/ui";
 import {
   analyzeField,
   isApiError,
@@ -111,12 +111,7 @@ export default function FieldScanPage() {
 
   return (
     <>
-      <Header
-        pathname="/field-scan"
-        variant="compact"
-        fixed={false}
-        profile="fieldScan"
-      />
+      <Header pathname="/field-scan" variant="compact" fixed={false} />
       <main className="flex-grow w-full max-w-container-max mx-auto px-margin-desktop py-stack-lg pb-8 md:pb-12">
         <FieldScanPageHeader />
 

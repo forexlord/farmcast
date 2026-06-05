@@ -1,7 +1,7 @@
 import { Badge } from "@/components/ui/badge";
 import { Icon } from "@/components/ui/icon";
 import { cn } from "@/lib/cn";
-import type { RiskFlag } from "@/data/forecast";
+import type { RiskFlag } from "@/types/ui";
 
 type RiskFlagItemProps = {
   flag: RiskFlag;

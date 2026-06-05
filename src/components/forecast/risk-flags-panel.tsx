@@ -1,6 +1,6 @@
 import { RiskFlagItem } from "@/components/forecast/risk-flag-item";
 import { Card } from "@/components/ui/card";
-import type { RiskFlag } from "@/data/forecast";
+import type { RiskFlag } from "@/types/ui";
 
 type RiskFlagsPanelProps = {
   flags: RiskFlag[];

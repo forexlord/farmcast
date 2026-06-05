@@ -1,6 +1,9 @@
-import type { ForecastDay } from "@/data/dashboard";
-import type { DailyForecast, RiskFlag } from "@/data/forecast";
-import type { Observation } from "@/data/field-scan";
+import type {
+  DailyForecast,
+  ForecastDay,
+  Observation,
+  RiskFlag,
+} from "@/types/ui";
 import { deriveRiskFlags, type ForecastRiskInput } from "@/lib/risk-engine";
 
 export type ApiError = {
@@ -203,7 +206,6 @@ export type HourlyChartView = {
 export type AiInsightView = {
   message: string;
   highlight: string;
-  actionLabel: string;
 };
 
 export type SoilDynamicsView = {
@@ -780,7 +782,6 @@ export function mapAiInsight(data: WeatherResponse): AiInsightView {
   return {
     message,
     highlight: highlightMatch?.[1]?.trim() ?? message.split(".")[0] ?? message,
-    actionLabel: "",
   };
 }
 
