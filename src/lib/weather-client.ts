@@ -187,19 +187,22 @@ export type FarmAdvisoryView = {
   soilMoisture: number;
 };
 
+export type HourlyChartPoint = {
+  time: string;
+  temperature: number;
+  precip: number;
+  x: number;
+  y: number;
+};
+
 export type HourlyChartView = {
   title: string;
   status: string;
   yAxisLabels: string[];
   xAxisLabels: string[];
-  precipBars: number[];
   temperaturePath: string;
-  peakPoint: { x: number; y: number };
-  tooltip: {
-    time: string;
-    temperature: string;
-    precip: string;
-  };
+  points: HourlyChartPoint[];
+  defaultIndex: number;
   legend: Array<{ label: string; color: "primary" | "secondary" }>;
 };
 
@@ -735,6 +738,15 @@ export function mapHourlyChart(data: WeatherResponse): HourlyChartView {
   const tickCount = 6;
   const step = Math.max(Math.floor(labels.length / tickCount), 1);
   const xAxisLabels = labels.filter((_, index) => index % step === 0);
+  const range = Math.max(maxTemp - minTemp, 1);
+
+  const points: HourlyChartPoint[] = temps.map((temperature, index) => ({
+    time: labels[index] || `Hour ${index + 1}`,
+    temperature,
+    precip: precip[index] ?? 0,
+    x: temps.length === 1 ? 50 : (index / (temps.length - 1)) * 100,
+    y: 90 - ((temperature - minTemp) / range) * 70,
+  }));
 
   return {
     title: "24H Dynamics",
@@ -747,25 +759,10 @@ export function mapHourlyChart(data: WeatherResponse): HourlyChartView {
       `${minTemp}°`,
     ],
     xAxisLabels: xAxisLabels.length > 0 ? xAxisLabels : ["Now"],
-    precipBars: precip.length > 0 ? precip : [0],
     temperaturePath: buildTemperaturePath(temps, minTemp, maxTemp),
-    peakPoint: {
-      x: temps.length === 1 ? 50 : (peakIndex / Math.max(temps.length - 1, 1)) * 100,
-      y:
-        90 -
-        ((Math.max(...temps, minTemp) - minTemp) /
-          Math.max(maxTemp - minTemp, 1)) *
-          70,
-    },
-    tooltip: {
-      time: labels[peakIndex] || "Peak",
-      temperature: `${Math.max(...temps, 0)}°C`,
-      precip: `${precip[peakIndex] ?? 0}% Precip Chance`,
-    },
-    legend: [
-      { label: "Temp (°C)", color: "primary" },
-      { label: "Precip %", color: "secondary" },
-    ],
+    points,
+    defaultIndex: peakIndex >= 0 ? peakIndex : 0,
+    legend: [{ label: "Temp (°C)", color: "primary" }],
   };
 }
 

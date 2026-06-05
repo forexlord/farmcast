@@ -143,6 +143,17 @@ For best results, use a **top-down drone or aerial photo** with clearly visible 
 
 Search for sample imagery (e.g. "drone aerial farm photo Kenya trees") to verify the CV pipeline. If a proper aerial image still returns zero trees, that points to a backend issue on WeatherAI's side — see Known issues below.
 
+## Troubleshooting
+
+### API quota exceeded (429)
+
+If you hit the WeatherAI rate limit, the **Dashboard** and **Forecast** pages show an error card with:
+
+- **Quota exceeded**
+- **Quota resets:** a date and time (from the API's `X-RateLimit-Reset` header)
+
+That reset time is when your quota becomes available again — not an automatic refresh. Wait until after that time, then click **Retry** on the error card to load weather data again. The app does not poll in the background; you need to retry manually once the reset time has passed.
+
 ## Known issues
 
 **Gemini AI insights (field scan & weather advisory):** Tree analysis observations/recommendations and some weather AI summaries depend on WeatherAI's Gemini integration, which appears to have a configuration issue on their end as of submission date. The upload, image storage, and CV pipeline work correctly. When `gemini_error` is present in the field scan response, the UI still shows CV results (tree count, health distribution, comparison images) with a notice that AI insights are temporarily unavailable.
