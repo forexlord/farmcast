@@ -1,4 +1,9 @@
-import { fetchUpstreamWeather, getWeatherApiKey } from "@/lib/api-utils";
+import {
+  buildWeatherGeoUpstreamUrl,
+  fetchUpstreamWeather,
+  getClientIpFromHeaders,
+  getWeatherApiKey,
+} from "@/lib/api-utils";
 import { mergeGeoResponse } from "./cache";
 import type { GeoWeatherResponse, WeatherResponse } from "./types";
 
@@ -10,10 +15,15 @@ async function fetchUpstream(url: string): Promise<Response> {
   return fetchUpstreamWeather(url, apiKey);
 }
 
-export async function fetchWeatherGeoServer(): Promise<GeoWeatherResponse | null> {
+export async function fetchWeatherGeoServer(
+  requestHeaders?: Headers,
+): Promise<GeoWeatherResponse | null> {
   try {
+    const clientIp = requestHeaders
+      ? getClientIpFromHeaders(requestHeaders)
+      : undefined;
     const upstream = await fetchUpstream(
-      "https://api.weather-ai.co/v1/weather-geo?ip=auto&days=7&ai=true&units=metric",
+      buildWeatherGeoUpstreamUrl(clientIp),
     );
     if (!upstream.ok) return null;
     const data = (await upstream.json()) as GeoWeatherResponse;

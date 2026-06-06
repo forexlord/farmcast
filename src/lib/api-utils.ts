@@ -2,7 +2,7 @@ import {
   parseErrorFromResponse,
   type ApiErrorBody,
 } from "@/lib/api-errors";
-import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
+import { checkRateLimit, getClientIp, getClientIpFromHeaders } from "@/lib/rate-limit";
 import { NextResponse } from "next/server";
 
 export type { ApiErrorBody };
@@ -28,6 +28,29 @@ export async function parseUpstreamError(
 }
 
 const RETRYABLE_UPSTREAM_STATUSES = new Set([404, 500, 502, 503]);
+
+function isUsableClientIp(ip: string): boolean {
+  if (!ip || ip === "unknown") return false;
+  if (ip === "::1" || ip === "127.0.0.1") return false;
+  if (ip.startsWith("10.") || ip.startsWith("192.168.") || ip.startsWith("172.")) {
+    return false;
+  }
+  return true;
+}
+
+export function buildWeatherGeoUpstreamUrl(clientIp?: string | null): string {
+  const url = new URL("https://api.weather-ai.co/v1/weather-geo");
+  url.searchParams.set(
+    "ip",
+    clientIp && isUsableClientIp(clientIp) ? clientIp : "auto",
+  );
+  url.searchParams.set("days", "7");
+  url.searchParams.set("ai", "true");
+  url.searchParams.set("units", "metric");
+  return url.toString();
+}
+
+export { getClientIpFromHeaders };
 
 export async function fetchUpstreamWeather(
   url: string,

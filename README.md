@@ -160,9 +160,11 @@ Search for sample imagery (e.g. "drone aerial farm photo Kenya trees") to verify
 
 ### Location & VPN
 
-Auto location uses WeatherAI’s `/v1/weather-geo?ip=auto`, which resolves position from the **request IP address** seen by the server — not GPS from your device.
+Auto location uses WeatherAI’s `/v1/weather-geo` with your **browser’s public IP** (from `x-forwarded-for` on Vercel, or your machine’s IP when running locally). It is **not** device GPS.
 
-If you are on a **VPN**, **proxy**, or **corporate network**, the detected city/region may not match where you actually are. The same applies if your ISP assigns you an IP in a different region, or if your public IP changes (mobile hotspot, travel, router reconnect).
+**Why Ashburn, Virginia on Vercel?** If geo lookup used only `ip=auto` from the server’s outbound request, WeatherAI would see **Vercel’s datacenter IP** (often Ashburn, VA — country code `ZZ`) instead of yours. FarmCast forwards the visitor’s IP from request headers so hosted deployments resolve the user’s location, not the server’s.
+
+**VPN / proxy / changed IP:** If you use a **VPN**, **proxy**, or **corporate network**, the detected city may still not match where you are. The same applies when your ISP assigns an IP in another region, or your public IP changes (mobile hotspot, travel, router reconnect).
 
 **What to do:** use the dashboard search bar to enter your farm or city, or click **Use my location** after disabling the VPN if you need IP-based detection. Searched coordinates are saved in the browser and used on the Forecast page until you search again.
 

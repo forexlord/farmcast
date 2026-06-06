@@ -1,6 +1,7 @@
 import { DashboardView } from "@/app/dashboard-view";
 import { fetchWeatherGeoServer } from "@/lib/weather/server";
 import type { Metadata } from "next";
+import { headers } from "next/headers";
 
 export const metadata: Metadata = {
   title: "FarmCast | Dashboard",
@@ -9,6 +10,7 @@ export const metadata: Metadata = {
 };
 
 export default async function DashboardPage() {
-  const initialData = await fetchWeatherGeoServer();
+  const requestHeaders = await headers();
+  const initialData = await fetchWeatherGeoServer(requestHeaders);
   return <DashboardView initialData={initialData} />;
 }

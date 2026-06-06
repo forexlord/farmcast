@@ -1,7 +1,9 @@
 import {
+  buildWeatherGeoUpstreamUrl,
   enforceRateLimit,
   errorResponse,
   fetchUpstreamWeather,
+  getClientIp,
   getWeatherApiKey,
   parseUpstreamError,
 } from "@/lib/api-utils";
@@ -16,8 +18,8 @@ export async function GET(request: NextRequest) {
     return errorResponse(500, "Weather API key is not configured");
   }
 
-  const url =
-    "https://api.weather-ai.co/v1/weather-geo?ip=auto&days=7&ai=true&units=metric";
+  const clientIp = getClientIp(request);
+  const url = buildWeatherGeoUpstreamUrl(clientIp);
 
   try {
     const upstream = await fetchUpstreamWeather(url, apiKey);
