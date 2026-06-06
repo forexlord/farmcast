@@ -1,5 +1,10 @@
 import type { ForecastRiskInput } from "@/lib/risk-engine";
-import type { DailyForecast, ForecastDay, Observation, RiskFlag } from "@/types/ui";
+import type {
+  DailyForecast,
+  ForecastDay,
+  Observation,
+  RiskFlag,
+} from "@/types/ui";
 
 export type { DailyForecast, ForecastDay, Observation, RiskFlag };
 

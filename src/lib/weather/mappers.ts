@@ -1,5 +1,10 @@
 import { deriveRiskFlags } from "@/lib/risk-engine";
-import type { DailyForecast, ForecastDay, Observation, RiskFlag } from "@/types/ui";
+import type {
+  DailyForecast,
+  ForecastDay,
+  Observation,
+  RiskFlag,
+} from "@/types/ui";
 import { hasGeminiError } from "./field-scan";
 import {
   conditionCodeToLabel,
@@ -189,68 +194,96 @@ export function mapFarmAdvisory(data: WeatherResponse): FarmAdvisoryView {
 }
 
 export function mapDashboardForecast(data: WeatherResponse): ForecastDay[] {
-  return getForecastDays(data).slice(0, 7).map((day, index) => {
-    const condition = resolveConditionLabel(
-      day.condition_code,
-      day.condition,
-      day.description,
-      day.weather,
-    );
-    const probability = Math.round(
-      day.precipitation_probability ?? day.precip_probability ?? 0,
-    );
-    const meta = barMetaFromRain(probability);
+  return getForecastDays(data)
+    .slice(0, 7)
+    .map((day, index) => {
+      const condition = resolveConditionLabel(
+        day.condition_code,
+        day.condition,
+        day.description,
+        day.weather,
+      );
+      const probability = Math.round(
+        day.precipitation_probability ?? day.precip_probability ?? 0,
+      );
+      const meta = barMetaFromRain(probability);
 
-    return {
-      day:
-        day.day ??
-        (day.date
-          ? new Date(day.date).toLocaleDateString("en-US", { weekday: "short" })
-          : ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][index % 7]),
-      icon: resolveMaterialIcon(day.icon, day.condition_code, condition),
-      high: getDayHigh(day),
-      low: getDayLow(day),
-      barWidth: meta.barWidth,
-      barColor: meta.barColor,
-      iconColor: meta.iconColor,
-    };
-  });
+      return {
+        day:
+          day.day ??
+          (day.date
+            ? new Date(day.date).toLocaleDateString("en-US", {
+                weekday: "short",
+              })
+            : ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][index % 7]),
+        icon: resolveMaterialIcon(day.icon, day.condition_code, condition),
+        high: getDayHigh(day),
+        low: getDayLow(day),
+        barWidth: meta.barWidth,
+        barColor: meta.barColor,
+        iconColor: meta.iconColor,
+      };
+    });
 }
 
 export function mapDailyForecasts(data: WeatherResponse): DailyForecast[] {
-  return getForecastDays(data).slice(0, 7).map((day, index) => {
-    const condition = resolveConditionLabel(
-      day.condition_code,
-      day.condition,
-      day.description,
-      day.weather,
-    );
-    const rainChance = Math.round(
-      day.precipitation_probability ?? day.precip_probability ?? 0,
-    );
-    const wind = getDayWind(day);
-    const code = Number(day.condition_code);
-    const isStorm =
-      condition.toLowerCase().includes("thunder") ||
-      (!Number.isNaN(code) && code >= 95) ||
-      rainChance >= 70;
+  return getForecastDays(data)
+    .slice(0, 7)
+    .map((day, index) => {
+      const condition = resolveConditionLabel(
+        day.condition_code,
+        day.condition,
+        day.description,
+        day.weather,
+      );
+      const rainChance = Math.round(
+        day.precipitation_probability ?? day.precip_probability ?? 0,
+      );
+      const wind = getDayWind(day);
+      const code = Number(day.condition_code);
+      const isStorm =
+        condition.toLowerCase().includes("thunder") ||
+        (!Number.isNaN(code) && code >= 95) ||
+        rainChance >= 70;
 
-    return {
-      day:
-        day.day ??
-        (day.date
-          ? new Date(day.date).toLocaleDateString("en-US", { weekday: "short" })
-          : `Day ${index + 1}`),
-      icon: resolveMaterialIcon(day.icon, day.condition_code, condition),
-      high: getDayHigh(day),
-      low: getDayLow(day),
-      rain: `${rainChance}%`,
-      wind: `${wind} km/h`,
-      iconColor: isStorm ? "error" : "primary",
-      dayColor: isStorm ? "primary" : undefined,
-      filled: isStorm,
-    };
+      return {
+        day:
+          day.day ??
+          (day.date
+            ? new Date(day.date).toLocaleDateString("en-US", {
+                weekday: "short",
+              })
+            : `Day ${index + 1}`),
+        icon: resolveMaterialIcon(day.icon, day.condition_code, condition),
+        high: getDayHigh(day),
+        low: getDayLow(day),
+        rain: `${rainChance}%`,
+        wind: `${wind} km/h`,
+        iconColor: isStorm ? "error" : "primary",
+        dayColor: isStorm ? "primary" : undefined,
+        filled: isStorm,
+      };
+    });
+}
+
+function findCurrentHourlyIndex(hourly: WeatherHourly[]): number {
+  const now = Date.now();
+  let bestIndex = 0;
+  let bestDistance = Infinity;
+
+  hourly.forEach((entry, index) => {
+    const raw = entry.time ?? entry.datetime ?? entry.hour ?? "";
+    if (!raw) return;
+    const date = new Date(raw);
+    if (Number.isNaN(date.getTime())) return;
+    const distance = Math.abs(date.getTime() - now);
+    if (distance < bestDistance) {
+      bestDistance = distance;
+      bestIndex = index;
+    }
   });
+
+  return bestIndex;
 }
 
 export function mapHourlyChart(data: WeatherResponse): HourlyChartView {
@@ -269,7 +302,7 @@ export function mapHourlyChart(data: WeatherResponse): HourlyChartView {
 
   const maxTemp = Math.max(...temps, 40);
   const minTemp = Math.min(...temps, 0);
-  const peakIndex = temps.indexOf(Math.max(...temps));
+  const currentIndex = findCurrentHourlyIndex(hourly);
 
   const labels = hourly.map((entry) => {
     const raw = entry.time ?? entry.datetime ?? entry.hour ?? "";
@@ -311,7 +344,7 @@ export function mapHourlyChart(data: WeatherResponse): HourlyChartView {
     xAxisLabels: xAxisLabels.length > 0 ? xAxisLabels : ["Now"],
     temperaturePath: buildTemperaturePath(temps, minTemp, maxTemp),
     points,
-    defaultIndex: peakIndex >= 0 ? peakIndex : 0,
+    defaultIndex: currentIndex,
     legend: [{ label: "Temp (°C)", color: "primary" }],
   };
 }
@@ -403,4 +436,8 @@ export function mapFieldScanResults(
   };
 }
 
-export { conditionCodeToLabel, resolveMaterialIcon, conditionToIcon } from "./icons";
+export {
+  conditionCodeToLabel,
+  resolveMaterialIcon,
+  conditionToIcon,
+} from "./icons";

@@ -3,7 +3,7 @@
 import { Card } from "@/components/ui/card";
 import { LegendDot } from "@/components/ui/legend-dot";
 import type { HourlyChartView } from "@/lib/weather-client";
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 type HourlyChartProps = {
   data: HourlyChartView;
@@ -33,18 +33,26 @@ export function HourlyChart({ data }: HourlyChartProps) {
   const chartRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(data.defaultIndex);
 
+  useEffect(() => {
+    setActiveIndex(data.defaultIndex);
+  }, [data.defaultIndex]);
+
   const updateActivePoint = useCallback(
     (clientX: number) => {
       const rect = chartRef.current?.getBoundingClientRect();
       if (!rect || data.points.length === 0) return;
 
-      const xRatio = Math.min(Math.max((clientX - rect.left) / rect.width, 0), 1);
+      const xRatio = Math.min(
+        Math.max((clientX - rect.left) / rect.width, 0),
+        1,
+      );
       setActiveIndex(findNearestIndex(data.points, xRatio * 100));
     },
     [data.points],
   );
 
-  const activePoint = data.points[activeIndex] ?? data.points[data.defaultIndex];
+  const activePoint =
+    data.points[activeIndex] ?? data.points[data.defaultIndex];
 
   if (!activePoint) {
     return null;
@@ -57,7 +65,11 @@ export function HourlyChart({ data }: HourlyChartProps) {
           <h2 className="text-headline-md shrink-0">{data.title}</h2>
           <div className="flex flex-wrap items-center gap-3 sm:gap-4">
             {data.legend.map((item) => (
-              <LegendDot key={item.label} color={item.color} label={item.label} />
+              <LegendDot
+                key={item.label}
+                color={item.color}
+                label={item.label}
+              />
             ))}
           </div>
         </div>
