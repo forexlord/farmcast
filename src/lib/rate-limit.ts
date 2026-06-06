@@ -8,7 +8,7 @@ const store = new Map<string, RateLimitEntry>();
 const WINDOW_MS = 60_000;
 const MAX_REQUESTS = 60;
 
-export function getClientIpFromHeaders(headers: Headers): string {
+export function getClientIpFromHeaders(headers: Pick<Headers, "get">): string {
   return (
     headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
     headers.get("x-vercel-forwarded-for")?.split(",")[0]?.trim() ??

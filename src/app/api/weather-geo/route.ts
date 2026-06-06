@@ -3,10 +3,10 @@ import {
   enforceRateLimit,
   errorResponse,
   fetchUpstreamWeather,
-  getClientIp,
   getWeatherApiKey,
   parseUpstreamError,
 } from "@/lib/api-utils";
+import { getClientIp } from "@/lib/rate-limit";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {

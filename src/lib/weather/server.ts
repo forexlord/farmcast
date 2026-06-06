@@ -16,7 +16,7 @@ async function fetchUpstream(url: string): Promise<Response> {
 }
 
 export async function fetchWeatherGeoServer(
-  requestHeaders?: Headers,
+  requestHeaders?: Pick<Headers, "get">,
 ): Promise<GeoWeatherResponse | null> {
   try {
     const clientIp = requestHeaders
